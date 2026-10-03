@@ -1,0 +1,100 @@
+[project]
+name = "uv-job-test"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Sonan", email = "57684344+SonaNaderi@users.noreply.github.com" }
+]
+requires-python = ">=3.10"
+
+[project.scripts]
+uv-job-test = "uv_job_test:main"
+
+[build-system]
+requires = ["uv_build>=0.12.22,<0.13.0"]
+build-backend = "uv_build"
+
+
+
+# Runtime dependencies only. These are the packages the deployed import/export
+# pipeline actually imports. requirements.txt is generated from this set via
+# `uv export --no-dev` (see README / dev tooling notes), so keep this list as the
+# single source of truth for runtime deps.
+dependencies = [
+    "boto3>=1.42.63",
+    "ecs-logging>=2.3.0",
+    "elasticsearch>=9.3.0",
+    "geopandas>=1.1.2",
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "psycopg2>=2.9.11",
+    "pyarrow>=24.0.0",
+    "pyogrio>=0.12.1",
+    "requests>=2.32.5",
+    "shapely>=2.1.2",
+    "sqlparse>=0.5.5",
+    "striprtf>=0.0.29",
+]
+
+# Local development / analysis only. NOT installed into the deployed image
+# (excluded from the generated requirements.txt by `uv export --no-dev`).
+[dependency-groups]
+dev = [
+    "notebook>=7.5.4",
+    "ollama>=0.6.1",
+    "psycopg2-binary>=2.9.11",
+    "pygwalker>=0.5.0.1",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.6.9",
+    "mypy>=1.12.0",
+]
+
+[tool.uv]
+managed = true
+package = true
+default-groups = ["dev"]
+constraint-dependencies = []
+build-constraint-dependencies = []
+override-dependencies = []
+exclude-dependencies = []
+environments = []
+required-environments = []
+sources = {}
+
+[tool.uv.workspace]
+members = []
+exclude = []
+
+[tool.uv.build-backend]
+module-root = "src"
+namespace = false
+default-excludes = true
+source-exclude = []
+source-include = []
+wheel-exclude = []
+
+[tool.uv.pip]
+index-url = "https://pypi.org/simple"
+extra-index-url = []
+find-links = []
+compile-bytecode = false
+prerelease = "if-necessary-or-explicit"
+generate-hashes = false
+verify-hashes = true
+break-system-packages = false
+system = false
+no-deps = false
+no-index = false
+upgrade = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+    "integration: requires multiple application components or local services",
+    "contract: verifies a stable external or serialized interface",
+    "property: checks an invariant over generated or parametrized input",
+    "golden: compares output with a reviewed approved artifact",
+]
